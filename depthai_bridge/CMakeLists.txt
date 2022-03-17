@@ -12,15 +12,29 @@ if(POLICY CMP0057)
 endif()
 
 
-set(opencv_version 4)
-find_package(OpenCV ${opencv_version} QUIET COMPONENTS imgproc highgui)
+find_package(OpenCV 4.5.0 QUIET)
 if(NOT OpenCV_FOUND)
   message(STATUS "----------------Did not find OpenCV 4, trying OpenCV 3--------------")
   set(opencv_version 3)
   find_package(OpenCV ${opencv_version} REQUIRED COMPONENTS imgproc highgui)
 endif()
 
-message(STATUS "----------------Did not find OpenCV 4, trying OpenCV 3--------------")
+set(OpenCV_INCLUDE_DIRS
+  /usr/local/lib/cmake/opencv4
+  /usr/local/include/opencv4
+)
+
+set(OpenCV_LIB_DIR
+  /usr/local/lib
+)
+
+set(OpenCV_LIBS
+  opencv_core
+  opencv_highgui
+  opencv_imgcodecs
+)
+
+message(STATUS "----------------que--------------")
 
 find_package(depthai CONFIG REQUIRED)
 message(STATUS ${depthai_VERSION})
@@ -66,8 +80,9 @@ if ( ament_cmake_FOUND )
     include_directories(
         include
         ${BUILD_TOOL_INCLUDE_DIRS}
-        # ${OpenCV_INCLUDE_DIRS}
+        ${OpenCV_INCLUDE_DIRS}
     )
+    link_directories(${OpenCV_LIB_DIR})
 
     FILE(GLOB LIB_SRC
     "src/DisparityConverter.cpp"
@@ -89,8 +104,7 @@ if ( ament_cmake_FOUND )
 
     target_link_libraries(${PROJECT_NAME} 
                           depthai::core 
-                          opencv_imgproc
-                          opencv_highgui) 
+                          ${OpenCV_LIBS}) 
 
     ament_export_targets(depthai_bridgeTargets HAS_LIBRARY_TARGET)
 
@@ -180,8 +194,7 @@ elseif( CATKIN_DEVEL_PREFIX OR CATKIN_BUILD_BINARY_PACKAGE )
     target_link_libraries(${PROJECT_NAME}
       ${catkin_LIBRARIES}
       depthai::core
-      opencv_imgproc
-      opencv_highgui
+      ${OpenCV_LIBS}
     )
 
     install(TARGETS ${PROJECT_NAME}
