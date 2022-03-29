@@ -1,4 +1,4 @@
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge/cv_bridge.h>
 
 #include <depthai/depthai.hpp>
 #include <depthai_bridge/ImageConverter.hpp>

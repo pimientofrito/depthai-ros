@@ -12,27 +12,14 @@ if(POLICY CMP0057)
 endif()
 
 
-find_package(OpenCV 4.5.0 QUIET)
+find_package(OpenCV REQUIRED
+            NO_DEFAULT_PATH 
+            PATHS /opt/opencv44)
 if(NOT OpenCV_FOUND)
   message(STATUS "----------------Did not find OpenCV 4, trying OpenCV 3--------------")
   set(opencv_version 3)
   find_package(OpenCV ${opencv_version} REQUIRED COMPONENTS imgproc highgui)
 endif()
-
-set(OpenCV_INCLUDE_DIRS
-  /usr/local/lib/cmake/opencv4
-  /usr/local/include/opencv4
-)
-
-set(OpenCV_LIB_DIR
-  /usr/local/lib
-)
-
-set(OpenCV_LIBS
-  opencv_core
-  opencv_highgui
-  opencv_imgcodecs
-)
 
 message(STATUS "----------------que--------------")
 
@@ -56,7 +43,9 @@ if ( ament_cmake_FOUND )
     set(BUILD_TOOL_INCLUDE_DIRS ${ament_INCLUDE_DIRS}})
 
     find_package(camera_info_manager REQUIRED)
-    find_package(cv_bridge REQUIRED)
+    find_package(cv_bridge REQUIRED
+            NO_DEFAULT_PATH
+            PATHS /home/irene/programming/cvbridge_ws/devel_isolated/cv_bridge/share/cv_bridge/)
     find_package(depthai_ros_msgs REQUIRED)
     find_package(image_transport REQUIRED)
     find_package(rclcpp REQUIRED)
@@ -142,7 +131,6 @@ elseif( CATKIN_DEVEL_PREFIX OR CATKIN_BUILD_BINARY_PACKAGE )
     find_package(Boost REQUIRED)
 
     find_package(catkin REQUIRED COMPONENTS  
-      cv_bridge
       camera_info_manager
       depthai_ros_msgs
       image_transport
@@ -152,6 +140,9 @@ elseif( CATKIN_DEVEL_PREFIX OR CATKIN_BUILD_BINARY_PACKAGE )
       std_msgs
       vision_msgs
     )
+    find_package(cv_bridge REQUIRED
+    NO_DEFAULT_PATH
+    PATHS /home/irene/programming/cvbridge_ws/devel_isolated/cv_bridge/share/cv_bridge/)
     find_package(Boost REQUIRED)
 
     FILE(GLOB LIB_SRC
