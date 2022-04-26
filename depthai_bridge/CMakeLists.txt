@@ -12,9 +12,10 @@ if(POLICY CMP0057)
 endif()
 
 
-find_package(OpenCV REQUIRED
+find_package(OpenCV 4 REQUIRED
             NO_DEFAULT_PATH 
-            PATHS /opt/opencv44)
+            PATHS /opt/opencv44
+            message(STATUS "----------------Found OpenCV4 at /opt/opencv44--------------"))
 if(NOT OpenCV_FOUND)
   message(STATUS "----------------Did not find OpenCV 4, trying OpenCV 3--------------")
   set(opencv_version 3)
